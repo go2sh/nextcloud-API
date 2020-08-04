@@ -6,15 +6,30 @@ class User(WithRequester):
     API_URL = "/ocs/v1.php/cloud/users"
     SUCCESS_CODE = 100
 
-    def add_user(self, uid, passwd):
+    def add_user(self, uid, passwd=None, displayName=None, email=None, groups=None, subadmin=None, quota=None, language=None):
         """
         Create a new user on the Nextcloud server
 
-        :param uid: str, uid of new user
-        :param passwd: str, password of new user
+        :param uid: string, the required username for the new user
+        :param passwd: string, the password for the new user, leave empty to send welcome mail
+        :param displayName: string, the display name for the new user
+        :param email: string, the email for the new user, required if password empty
+        :param groups: array, the groups for the new user
+        :param subadmin: array, the groups in which the new user is subadmin
+        :param quota: string, quota for the new user
+        :param language: string, language for the new user
         :return:
         """
-        msg = {'userid': uid, 'password': passwd}
+        msg = {
+            'userid': uid,
+            'password': passwd,
+            'displayName': displayName,
+            'email': email,
+            'groups': groups,
+            'subadmin': subadmin,
+            'quota': quota,
+            'language': language
+        }
         return self.requester.post("", msg)
 
     def get_users(self, search=None, limit=None, offset=None):

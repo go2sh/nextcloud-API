@@ -28,9 +28,10 @@ class Requester(object):
 
         self.base_url = endpoint
 
-        self.h_get = {"OCS-APIRequest": "true"}
+        self.h_get = {"OCS-APIRequest": "true",
+                      "Accept": "application/json"}
         self.h_post = {"OCS-APIRequest": "true",
-                       "Content-Type": "application/x-www-form-urlencoded"}
+                       "Content-Type": "application/json"}
         self.auth_pk = (user, passwd)
         self.API_URL = None
         self.SUCCESS_CODE = None
@@ -50,7 +51,7 @@ class Requester(object):
     @catch_connection_error
     def post(self, url="", data=None):
         url = self.get_full_url(url)
-        res = requests.post(url, auth=self.auth_pk, data=data, headers=self.h_post)
+        res = requests.post(url, auth=self.auth_pk, json=data, headers=self.h_post)
         return self.rtn(res)
 
     @catch_connection_error
@@ -59,19 +60,19 @@ class Requester(object):
         if isinstance(timestamp, (float, int)):
             h_post["X-OC-MTIME"] = f"{timestamp:.0f}"
         url = self.get_full_url(url)
-        res = requests.put(url, auth=self.auth_pk, data=data, headers=h_post)
+        res = requests.put(url, auth=self.auth_pk, json=data, headers=h_post)
         return self.rtn(res)
 
     @catch_connection_error
     def put(self, url="", data=None):
         url = self.get_full_url(url)
-        res = requests.put(url, auth=self.auth_pk, data=data, headers=self.h_post)
+        res = requests.put(url, auth=self.auth_pk, json=data, headers=self.h_post)
         return self.rtn(res)
 
     @catch_connection_error
     def delete(self, url="", data=None):
         url = self.get_full_url(url)
-        res = requests.delete(url, auth=self.auth_pk, data=data, headers=self.h_post)
+        res = requests.delete(url, auth=self.auth_pk, json=data, headers=self.h_post)
         return self.rtn(res)
 
     def get_full_url(self, additional_url=""):
